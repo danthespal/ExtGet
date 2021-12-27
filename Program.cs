@@ -2,16 +2,25 @@
 {
     public static void Main(string[] args)
     {
-        foreach(string path in args)
+        if(args.Length == 0)
         {
-            if(File.Exists(path) || Directory.Exists(path))
+            Console.WriteLine("\nExtGet v0.1 BETA\n");
+            Console.WriteLine("you should use the program with a path argument.\n");
+            Console.WriteLine("eg: ExtGet.exe <path>\n");
+        }
+        else
+        {
+            foreach (string path in args)
             {
-                // this path is a file or directory
-                ProcessFiles(path);
-            }
-            else
-            {
-                Console.WriteLine($"{path} is not a valid file or directory.");
+                if (File.Exists(path) || Directory.Exists(path))
+                {
+                    // this path is a file or directory
+                    ProcessFiles(path);
+                }
+                else
+                {
+                    Console.WriteLine($"{path} is not a valid file or directory.");
+                }
             }
         }
     }
