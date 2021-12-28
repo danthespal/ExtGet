@@ -1,17 +1,21 @@
-﻿namespace ExtGet
+﻿using System.Diagnostics;
+
+namespace ExtGet
 {
     public partial class RecursiveFileProcessor
     {
         private static readonly string Name = "ExtGet";
-        private static readonly string Version = "v0.5 BETA";
+        private static readonly string Version = "v0.6 BETA";
 
         public static void Main(string[] args)
         {
+            InitiateTracer();
+
             if (args.Length == 0)
             {
-                Console.WriteLine($"\n{Name} {Version}\n");
-                Console.WriteLine("you should use the program with a path argument.\n");
-                Console.WriteLine("eg: ExtGet.exe <path>\n");
+                Trace.WriteLine($"\n{Name} {Version}\n");
+                Trace.WriteLine("you should use the program with a path argument.\n");
+                Trace.WriteLine("eg: ExtGet.exe <path>\n");
             }
             else
             {
@@ -25,10 +29,27 @@
                     }
                     else
                     {
-                        Console.WriteLine($"{path} is not a valid file or directory.");
+                        Trace.WriteLine($"{path} is not a valid file or directory.");
                     }
                 }
             }
+        }
+
+        // initiates a tracer which will print to both
+        // the Console and to a log file, log.txt
+        private static void InitiateTracer()
+        {
+            Trace.Listeners.Clear();
+            _ = AppDomain.CurrentDomain.BaseDirectory;
+            TextWriterTraceListener? twtl = new("log.txt")
+            {
+                Name = "TextLogger",
+                TraceOutputOptions = TraceOptions.ThreadId | TraceOptions.DateTime
+            };
+            ConsoleTraceListener? ctl = new(false) { TraceOutputOptions = TraceOptions.DateTime };
+            _ = Trace.Listeners.Add(twtl);
+            _ = Trace.Listeners.Add(ctl);
+            Trace.AutoFlush = true;
         }
 
         private static long GetDirectorySize(string path)
@@ -103,10 +124,10 @@
             int fCount = Directory.GetFiles(targetDirectory, "*", SearchOption.AllDirectories).Length;
 
             // print out the results
-            Console.WriteLine($"\n{Name} {Version}");
-            Console.WriteLine($"- coded by danthespal aka dannybest\n");
-            Console.WriteLine($"Target: \"{targetDirectory}\"\n");
-            Console.WriteLine($"Upload data info:");
+            Trace.WriteLine($"\n{Name} {Version}");
+            Trace.WriteLine($"- coded by danthespal aka dannybest\n");
+            Trace.WriteLine($"Target: \"{targetDirectory}\"\n");
+            Trace.WriteLine($"Upload data info:");
 
             foreach (KeyValuePair<string, FileStatisticInfo> items in extensions)
             {
@@ -114,19 +135,19 @@
 
                 if (items.Key == "")
                 {
-                    Console.WriteLine($"----------.unknown - {percentage}%");
-                    Console.WriteLine($".unknown : {items.Value.Count} files, {BytesToString(items.Value.TotalSize)}");
-                    Console.WriteLine("------------------------------\n");
+                    Trace.WriteLine($"----------.unknown - {percentage}%");
+                    Trace.WriteLine($".unknown : {items.Value.Count} files, {BytesToString(items.Value.TotalSize)}");
+                    Trace.WriteLine("------------------------------\n");
                 }
                 else
                 {
-                    Console.WriteLine($"----------{items.Key} - {percentage}%");
-                    Console.WriteLine($"{items.Key} : {items.Value.Count} files, {BytesToString(items.Value.TotalSize)}");
-                    Console.WriteLine("------------------------------\n");
+                    Trace.WriteLine($"----------{items.Key} - {percentage}%");
+                    Trace.WriteLine($"{items.Key} : {items.Value.Count} files, {BytesToString(items.Value.TotalSize)}");
+                    Trace.WriteLine("------------------------------\n");
                 }
             }
 
-            Console.WriteLine($"Total Files: {fCount} | Size: {BytesToString(GetDirectorySize(targetDirectory))}");
+            Trace.WriteLine($"Total Files: {fCount} | Size: {BytesToString(GetDirectorySize(targetDirectory))}");
         }
     }
 }
