@@ -2,11 +2,14 @@
 {
     public class RecursiveFileProcessor
     {
+        private static string Name = "ExtGet";
+        private static string Version = "v0.4 BETA";
+
         public static void Main(string[] args)
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("\nExtGet v0.3 BETA\n");
+                Console.WriteLine($"\n{Name} {Version}\n");
                 Console.WriteLine("you should use the program with a path argument.\n");
                 Console.WriteLine("eg: ExtGet.exe <path>\n");
             }
@@ -35,9 +38,9 @@
 
         public static void ProcessFiles(string targetDirectory)
         {
+            // count all extensions in directory and sub directory
             Dictionary<string, FileStatisticInfo> extensions = new();
 
-            // count all extensions in directory and sub directory
             void CalcFilesCount(string targetDirectory)
             {
                 IEnumerable<IGrouping<string, string>>? files = Directory.GetFiles(targetDirectory).GroupBy(p => Path.GetExtension(p));
@@ -67,6 +70,22 @@
 
             CalcFilesCount(targetDirectory);
 
+            // total size of directory
+            static long GetDirectorySize(string path)
+            {
+                IEnumerable<string>? files = Directory.EnumerateFiles(path);
+
+                // get the sizeof all files in the current directory
+                long currentSize = (from file in files let fileInfo = new FileInfo(file) select fileInfo.Length).Sum();
+
+                IEnumerable<string>? directories = Directory.EnumerateDirectories(path);
+
+                // get the size of all files in all subdirectories
+                long subDirSize = (from directory in directories select GetDirectorySize(directory)).Sum();
+
+                return currentSize + subDirSize;
+            }
+
             // convert bytes to more human readable style
             static string BytesToString(long byteCount)
             {
@@ -88,7 +107,8 @@
             int fCount = Directory.GetFiles(targetDirectory, "*", SearchOption.AllDirectories).Length;
 
             // print out the results
-            Console.WriteLine("\nExtGet v0.3 BETA\n");
+            Console.WriteLine($"\n{Name} {Version}\n");
+
             foreach (KeyValuePair<string, FileStatisticInfo> items in extensions)
             {
                 double percentage = (double)Math.Round((double)(items.Value.Count * 100) / fCount, 2);
@@ -106,7 +126,8 @@
                     Console.WriteLine("------------------------------\n");
                 }
             }
-            Console.WriteLine("Total Files: " + fCount);
+
+            Console.WriteLine($"Total Files: {fCount} | Size: {BytesToString(GetDirectorySize(targetDirectory))}");
         }
     }
 }
