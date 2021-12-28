@@ -41,7 +41,14 @@ namespace ExtGet
         {
             if (File.Exists(@"./log.txt"))
             {
-                File.Delete(@"./log.txt");
+                try
+                {
+                    File.Delete(@"./log.txt");
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(ex.ToString());
+                }
             }
 
             Trace.Listeners.Clear();
