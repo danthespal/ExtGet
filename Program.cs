@@ -97,7 +97,7 @@
                 if (items.Key == "")
                 {
                     Console.WriteLine($"----------.unknown - {percentage}%");
-                    Console.WriteLine($".unknown : {items.Value} files, {BytesToString(items.Value.TotalSize)}");
+                    Console.WriteLine($".unknown : {items.Value.Count} files, {BytesToString(items.Value.TotalSize)}");
                     Console.WriteLine("------------------------------\n");
                 }
                 else
