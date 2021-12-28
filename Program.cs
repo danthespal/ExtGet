@@ -61,20 +61,20 @@
 
             // print out the results
             Console.WriteLine("\nExtGet v0.2 BETA\n");
-            foreach (KeyValuePair<string, int> file in extensions)
+            foreach (KeyValuePair<string, int> items in extensions)
             {
-                double percentage = (double)Math.Round((double)(file.Value * 100) / fCount, 2);
+                double percentage = (double)Math.Round((double)(items.Value * 100) / fCount, 2);
 
-                if (file.Key == "")
+                if (items.Key == "")
                 {
-                    Console.WriteLine("----------" + ".unknown" + " - " + percentage + "%");
-                    Console.WriteLine(".unknown : " + file.Value + " files");
+                    Console.WriteLine($"----------.unknown - {percentage}%");
+                    Console.WriteLine($".unknown : {items.Value} files");
                     Console.WriteLine("------------------------------\n");
                 }
                 else
                 {
-                    Console.WriteLine("----------" + file.Key + " - " + percentage + "%");
-                    Console.WriteLine(file.Key + " : " + file.Value + " files");
+                    Console.WriteLine($"----------{items.Key} - {percentage}%");
+                    Console.WriteLine($"{items.Key} : {items.Value} files");
                     Console.WriteLine("------------------------------\n");
                 }
             }
