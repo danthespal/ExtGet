@@ -31,6 +31,7 @@
         {
             Dictionary<string, int> extensions = new();
 
+            // count all extensions in directory and sub directory
             void CalcFilesCount(string targetDirectory)
             {
                 IEnumerable<IGrouping<string, string>>? files = Directory.GetFiles(targetDirectory).GroupBy(p => Path.GetExtension(p));
@@ -55,12 +56,26 @@
 
             CalcFilesCount(targetDirectory);
 
+            // print out the results
             Console.WriteLine("\nExtGet v0.1 BETA\n");
-
             foreach (KeyValuePair<string, int> file in extensions)
             {
-                Console.WriteLine(file.Key + " : " + file.Value);
+                if (file.Key == "")
+                {
+                    Console.WriteLine("---------------" + ".unknown");
+                    Console.WriteLine(".unknown : " + file.Value + "\n");
+                }
+                else
+                {
+                    Console.WriteLine("---------------" + file.Key);
+                    Console.WriteLine(file.Key + " : " + file.Value + " files" + "\n");
+                }
             }
+
+            // count all files from input directory and all sub directory
+            // print the result
+            int fCount = Directory.GetFiles(targetDirectory, "*", SearchOption.AllDirectories).Length;
+            Console.WriteLine("Total Files: " + fCount);
         }
     }
 }
