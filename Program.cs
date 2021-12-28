@@ -3,7 +3,7 @@
     public partial class RecursiveFileProcessor
     {
         private static readonly string Name = "ExtGet";
-        private static readonly string Version = "v0.4 BETA";
+        private static readonly string Version = "v0.5 BETA";
 
         public static void Main(string[] args)
         {
