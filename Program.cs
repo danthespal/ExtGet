@@ -39,11 +39,13 @@ namespace ExtGet
         // the Console and to a log file, log.txt
         private static void InitiateTracer()
         {
-            if (File.Exists(@"./log.txt"))
+            string logfile = "log.txt";
+
+            if (File.Exists(logfile))
             {
                 try
                 {
-                    File.Delete(@"./log.txt");
+                    File.Delete(logfile);
                 }
                 catch (Exception ex)
                 {
@@ -53,7 +55,7 @@ namespace ExtGet
 
             Trace.Listeners.Clear();
             _ = AppDomain.CurrentDomain.BaseDirectory;
-            TextWriterTraceListener? twtl = new("log.txt")
+            TextWriterTraceListener? twtl = new(logfile)
             {
                 Name = "TextLogger",
                 TraceOutputOptions = TraceOptions.ThreadId | TraceOptions.DateTime
