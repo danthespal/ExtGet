@@ -6,7 +6,7 @@
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("\nExtGet v0.1 BETA\n");
+                Console.WriteLine("\nExtGet v0.2 BETA\n");
                 Console.WriteLine("you should use the program with a path argument.\n");
                 Console.WriteLine("eg: ExtGet.exe <path>\n");
             }
@@ -56,25 +56,28 @@
 
             CalcFilesCount(targetDirectory);
 
+            // count all the files from directory and sub directory
+            int fCount = Directory.GetFiles(targetDirectory, "*", SearchOption.AllDirectories).Length;
+
             // print out the results
-            Console.WriteLine("\nExtGet v0.1 BETA\n");
+            Console.WriteLine("\nExtGet v0.2 BETA\n");
             foreach (KeyValuePair<string, int> file in extensions)
             {
+                double percentage = (double)Math.Round((double)(file.Value * 100) / fCount, 2);
+
                 if (file.Key == "")
                 {
-                    Console.WriteLine("---------------" + ".unknown");
-                    Console.WriteLine(".unknown : " + file.Value + "\n");
+                    Console.WriteLine("----------" + ".unknown" + " - " + percentage + "%");
+                    Console.WriteLine(".unknown : " + file.Value + " files");
+                    Console.WriteLine("------------------------------\n");
                 }
                 else
                 {
-                    Console.WriteLine("---------------" + file.Key);
-                    Console.WriteLine(file.Key + " : " + file.Value + " files" + "\n");
+                    Console.WriteLine("----------" + file.Key + " - " + percentage + "%");
+                    Console.WriteLine(file.Key + " : " + file.Value + " files");
+                    Console.WriteLine("------------------------------\n");
                 }
             }
-
-            // count all files from input directory and all sub directory
-            // print the result
-            int fCount = Directory.GetFiles(targetDirectory, "*", SearchOption.AllDirectories).Length;
             Console.WriteLine("Total Files: " + fCount);
         }
     }
