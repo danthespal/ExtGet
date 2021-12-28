@@ -31,6 +31,21 @@
             }
         }
 
+        private static long GetDirectorySize(string path)
+        {
+            IEnumerable<string>? files = Directory.EnumerateFiles(path);
+
+            // get the sizeof all files in the current directory
+            long currentSize = (from file in files let fileInfo = new FileInfo(file) select fileInfo.Length).Sum();
+
+            IEnumerable<string>? directories = Directory.EnumerateDirectories(path);
+
+            // get the size of all files in all subdirectories
+            long subDirSize = (from directory in directories select GetDirectorySize(directory)).Sum();
+
+            return currentSize + subDirSize;
+        }
+
         public static void ProcessFiles(string targetDirectory)
         {
             // count all extensions in directory and sub directory
@@ -88,7 +103,10 @@
             int fCount = Directory.GetFiles(targetDirectory, "*", SearchOption.AllDirectories).Length;
 
             // print out the results
-            Console.WriteLine($"\n{Name} {Version}\n");
+            Console.WriteLine($"\n{Name} {Version}");
+            Console.WriteLine($"- coded by danthespal aka dannybest\n");
+            Console.WriteLine($"Target: \"{targetDirectory}\"\n");
+            Console.WriteLine($"Upload data info:");
 
             foreach (KeyValuePair<string, FileStatisticInfo> items in extensions)
             {
@@ -109,21 +127,6 @@
             }
 
             Console.WriteLine($"Total Files: {fCount} | Size: {BytesToString(GetDirectorySize(targetDirectory))}");
-        }
-
-        private static long GetDirectorySize(string path)
-        {
-            IEnumerable<string>? files = Directory.EnumerateFiles(path);
-
-            // get the sizeof all files in the current directory
-            long currentSize = (from file in files let fileInfo = new FileInfo(file) select fileInfo.Length).Sum();
-
-            IEnumerable<string>? directories = Directory.EnumerateDirectories(path);
-
-            // get the size of all files in all subdirectories
-            long subDirSize = (from directory in directories select GetDirectorySize(directory)).Sum();
-
-            return currentSize + subDirSize;
         }
     }
 }
