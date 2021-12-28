@@ -1,9 +1,9 @@
 ﻿namespace ExtGet
 {
-    public class RecursiveFileProcessor
+    public partial class RecursiveFileProcessor
     {
-        private static string Name = "ExtGet";
-        private static string Version = "v0.4 BETA";
+        private static readonly string Name = "ExtGet";
+        private static readonly string Version = "v0.4 BETA";
 
         public static void Main(string[] args)
         {
@@ -15,8 +15,9 @@
             }
             else
             {
-                foreach (string path in args)
+                for (int i = 0; i < args.Length; i++)
                 {
+                    string path = args[i];
                     if (File.Exists(path) || Directory.Exists(path))
                     {
                         // this path is a file or directory
@@ -28,12 +29,6 @@
                     }
                 }
             }
-        }
-
-        public class FileStatisticInfo
-        {
-            public int Count { get; set; }
-            public long TotalSize { get; set; }
         }
 
         public static void ProcessFiles(string targetDirectory)
@@ -62,29 +57,15 @@
                     }
                 }
 
-                foreach (string? p2 in Directory.GetDirectories(targetDirectory))
+                string[] array = Directory.GetDirectories(targetDirectory);
+                for (int i = 0; i < array.Length; i++)
                 {
+                    string? p2 = array[i];
                     CalcFilesCount(p2);
                 }
             }
 
             CalcFilesCount(targetDirectory);
-
-            // total size of directory
-            static long GetDirectorySize(string path)
-            {
-                IEnumerable<string>? files = Directory.EnumerateFiles(path);
-
-                // get the sizeof all files in the current directory
-                long currentSize = (from file in files let fileInfo = new FileInfo(file) select fileInfo.Length).Sum();
-
-                IEnumerable<string>? directories = Directory.EnumerateDirectories(path);
-
-                // get the size of all files in all subdirectories
-                long subDirSize = (from directory in directories select GetDirectorySize(directory)).Sum();
-
-                return currentSize + subDirSize;
-            }
 
             // convert bytes to more human readable style
             static string BytesToString(long byteCount)
@@ -128,6 +109,21 @@
             }
 
             Console.WriteLine($"Total Files: {fCount} | Size: {BytesToString(GetDirectorySize(targetDirectory))}");
+        }
+
+        private static long GetDirectorySize(string path)
+        {
+            IEnumerable<string>? files = Directory.EnumerateFiles(path);
+
+            // get the sizeof all files in the current directory
+            long currentSize = (from file in files let fileInfo = new FileInfo(file) select fileInfo.Length).Sum();
+
+            IEnumerable<string>? directories = Directory.EnumerateDirectories(path);
+
+            // get the size of all files in all subdirectories
+            long subDirSize = (from directory in directories select GetDirectorySize(directory)).Sum();
+
+            return currentSize + subDirSize;
         }
     }
 }
