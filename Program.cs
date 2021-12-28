@@ -67,7 +67,7 @@
 
             CalcFilesCount(targetDirectory);
 
-            // transfer bytes to more human readable
+            // convert bytes to more human readable style
             static string BytesToString(long byteCount)
             {
                 string[] suf = { " B", " KB", " MB", " GB", " TB", " PB", " EB" };
@@ -83,7 +83,6 @@
 
                 return (Math.Sign(byteCount) * num).ToString() + suf[place];
             }
-
 
             // count all the files from directory and sub directory
             int fCount = Directory.GetFiles(targetDirectory, "*", SearchOption.AllDirectories).Length;
