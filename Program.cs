@@ -5,7 +5,7 @@ namespace ExtGet
     public partial class RecursiveFileProcessor
     {
         private static readonly string Name = "ExtGet";
-        private static readonly string Version = "v0.7 BETA";
+        private static readonly string Version = "v0.6a BETA";
 
         public static void Main(string[] args)
         {
