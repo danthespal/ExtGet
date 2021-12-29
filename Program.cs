@@ -1,21 +1,23 @@
-﻿using System.Diagnostics;
+﻿using Pastel;
+// using System.Diagnostics;
+using System.Drawing;
 
 namespace ExtGet
 {
     public partial class RecursiveFileProcessor
     {
         private static readonly string Name = "ExtGet";
-        private static readonly string Version = "v0.6 BETA";
+        private static readonly string Version = "v0.7 BETA";
 
         public static void Main(string[] args)
         {
-            InitiateTracer();
+            // InitiateTracer();
 
             if (args.Length == 0)
             {
-                Trace.WriteLine($"\n{Name} {Version}\n");
-                Trace.WriteLine("you should use the program with a path argument.\n");
-                Trace.WriteLine("eg: ExtGet.exe <path>\n");
+                Console.WriteLine($"\n{Name} {Version}\n");
+                Console.WriteLine("you should use the program with a path argument.\n".Pastel(Color.Yellow));
+                Console.WriteLine("eg: ExtGet.exe <path>\n".Pastel(Color.Blue));
             }
             else
             {
@@ -29,12 +31,13 @@ namespace ExtGet
                     }
                     else
                     {
-                        Trace.WriteLine($"{path} is not a valid file or directory.");
+                        Console.WriteLine($"{path} is not a valid file or directory.".Pastel(Color.Red));
                     }
                 }
             }
         }
 
+        /*
         // initiates a tracer which will print to both
         // the Console and to a log file, log.txt
         private static void InitiateTracer()
@@ -65,6 +68,7 @@ namespace ExtGet
             _ = Trace.Listeners.Add(ctl);
             Trace.AutoFlush = true;
         }
+        */
 
         private static long GetDirectorySize(string path)
         {
@@ -138,10 +142,10 @@ namespace ExtGet
             int fCount = Directory.GetFiles(targetDirectory, "*", SearchOption.AllDirectories).Length;
 
             // print out the results
-            Trace.WriteLine($"\n{Name} {Version}");
-            Trace.WriteLine($"- coded by danthespal aka dannybest\n");
-            Trace.WriteLine($"Target: \"{targetDirectory}\"\n");
-            Trace.WriteLine($"Upload data info:");
+            Console.WriteLine($"\n{Name} {Version}".Pastel(Color.Red));
+            Console.WriteLine($"- coded by danthespal aka dannybest\n".Pastel(Color.Red));
+            Console.WriteLine($"Target: \"{targetDirectory}\"".Pastel(Color.AliceBlue));
+            Console.WriteLine($"Upload data info:\n".Pastel(Color.AliceBlue));
 
             foreach (KeyValuePair<string, FileStatisticInfo> items in extensions)
             {
@@ -149,19 +153,19 @@ namespace ExtGet
 
                 if (items.Key == "")
                 {
-                    Trace.WriteLine($"----------.unknown - {percentage}%");
-                    Trace.WriteLine($".unknown : {items.Value.Count:N0} files | {BytesToString(items.Value.TotalSize)}");
-                    Trace.WriteLine("------------------------------\n");
+                    Console.WriteLine($"----------.unknown - {percentage}%");
+                    Console.WriteLine($".unknown : {items.Value.Count:N0} files | {BytesToString(items.Value.TotalSize).Pastel(Color.Yellow)}");
+                    Console.WriteLine("------------------------------\n");
                 }
                 else
                 {
-                    Trace.WriteLine($"----------{items.Key} - {percentage}%");
-                    Trace.WriteLine($"{items.Key} : {items.Value.Count:N0} files | {BytesToString(items.Value.TotalSize)}");
-                    Trace.WriteLine("------------------------------\n");
+                    Console.WriteLine($"----------{items.Key} - {percentage}%");
+                    Console.WriteLine($"{items.Key} : {items.Value.Count:N0} files | {BytesToString(items.Value.TotalSize).Pastel(Color.Yellow)}");
+                    Console.WriteLine("------------------------------\n".Pastel(Color.Green));
                 }
             }
 
-            Trace.WriteLine($"Total Files: {fCount:N0} [{BytesToString(GetDirectorySize(targetDirectory))}]");
+            Console.WriteLine($"Total Files: {fCount:N0} | {BytesToString(GetDirectorySize(targetDirectory)).Pastel(Color.Yellow)}");
         }
     }
 }
