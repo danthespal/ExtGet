@@ -150,18 +150,18 @@ namespace ExtGet
                 if (items.Key == "")
                 {
                     Trace.WriteLine($"----------.unknown - {percentage}%");
-                    Trace.WriteLine($".unknown : {items.Value.Count} files, {BytesToString(items.Value.TotalSize)}");
+                    Trace.WriteLine($".unknown : {items.Value.Count:N0} files | {BytesToString(items.Value.TotalSize)}");
                     Trace.WriteLine("------------------------------\n");
                 }
                 else
                 {
                     Trace.WriteLine($"----------{items.Key} - {percentage}%");
-                    Trace.WriteLine($"{items.Key} : {items.Value.Count} files, {BytesToString(items.Value.TotalSize)}");
+                    Trace.WriteLine($"{items.Key} : {items.Value.Count:N0} files | {BytesToString(items.Value.TotalSize)}");
                     Trace.WriteLine("------------------------------\n");
                 }
             }
 
-            Trace.WriteLine($"Total Files: {fCount} | Size: {BytesToString(GetDirectorySize(targetDirectory))}");
+            Trace.WriteLine($"Total Files: {fCount:N0} [{BytesToString(GetDirectorySize(targetDirectory))}]");
         }
     }
 }
